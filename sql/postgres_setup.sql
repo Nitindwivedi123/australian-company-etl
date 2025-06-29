@@ -1,0 +1,12 @@
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'etl_user') THEN
+      CREATE ROLE etl_user LOGIN PASSWORD 'securepassword';
+   END IF;
+END
+$$;
+GRANT CONNECT ON DATABASE company_db TO etl_user;
+GRANT USAGE ON SCHEMA public TO etl_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO etl_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO etl_user;
